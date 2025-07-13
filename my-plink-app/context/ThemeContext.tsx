@@ -18,6 +18,7 @@ interface ThemeColors {
 interface Theme {
   colors: ThemeColors;
   blur: boolean;
+  blurIntensity: number;
 }
 
 interface ThemeContextType {
@@ -52,6 +53,7 @@ const lightTheme: Theme = {
     buttonText: '#374151',
   },
   blur: false,
+  blurIntensity: 0,
 };
 
 const darkTheme: Theme = {
@@ -69,23 +71,25 @@ const darkTheme: Theme = {
     buttonText: '#f9fafb',
   },
   blur: false,
+  blurIntensity: 0,
 };
 
-const iosGlassTheme: Theme = {
+const liquidGlassTheme: Theme = {
   colors: {
-    background: 'rgba(120, 120, 120, 0.3)',
-    surface: 'rgba(255, 255, 255, 0.18)',
-    card: 'rgba(255, 255, 255, 0.12)',
+    background: 'rgba(120, 120, 120, 0.15)',
+    surface: 'rgba(255, 255, 255, 0.08)',
+    card: 'rgba(255, 255, 255, 0.06)',
     text: '#1f2937',
     textSecondary: '#4b5563',
     primary: '#3b82f6',
     primaryLight: '#60a5fa',
-    border: 'rgba(255, 255, 255, 0.3)',
-    input: 'rgba(255, 255, 255, 0.20)',
-    button: 'rgba(255, 255, 255, 0.18)',
+    border: 'rgba(255, 255, 255, 0.2)',
+    input: 'rgba(255, 255, 255, 0.12)',
+    button: 'rgba(255, 255, 255, 0.12)',
     buttonText: '#1f2937',
   },
   blur: true,
+  blurIntensity: 80,
 };
 
 export default function ThemeProvider({ children }: { children: React.ReactNode }) {
@@ -103,8 +107,8 @@ export default function ThemeProvider({ children }: { children: React.ReactNode 
     switch (currentTheme) {
       case 'dark':
         return darkTheme;
-      case 'ios-glass':
-        return iosGlassTheme;
+      case 'liquidGlass':
+        return liquidGlassTheme;
       case 'system':
         return systemTheme === 'dark' ? darkTheme : lightTheme;
       default:

@@ -10,9 +10,9 @@ import {
   RefreshControl,
 } from 'react-native';
 import { BlurView } from 'expo-blur';
-import { ChevronLeft, Heart, MessageCircle, Share2, Bookmark, TrendingUp } from 'lucide-react-native';
+import { Heart, MessageCircle, Share2, Bookmark, TrendingUp } from 'lucide-react-native';
 import { useTheme } from '@/context/ThemeContext';
-import { router } from 'expo-router';
+import Header from '@/components/Header';
 
 interface FeedItem {
   id: number;
@@ -88,7 +88,6 @@ export default function FeedScreen() {
 
   const onRefresh = () => {
     setRefreshing(true);
-    // Simulate refresh
     setTimeout(() => {
       setRefreshing(false);
     }, 1000);
@@ -123,13 +122,36 @@ export default function FeedScreen() {
 
   const renderFeedItem = ({ item }: { item: FeedItem }) => (
     <View style={[styles.feedItem, { backgroundColor: theme.colors.card }]}>
+      {theme.blur && (
+        <BlurView
+          style={StyleSheet.absoluteFillObject}
+          intensity={theme.blurIntensity / 2}
+          tint={currentTheme === 'dark' ? 'dark' : 'light'}
+        />
+      )}
       <View style={styles.feedHeader}>
         <View style={styles.feedMeta}>
           {getTypeIcon(item.type)}
-          <Text style={[styles.feedAuthor, { color: theme.colors.text }]}>
+          <Text style={[
+            styles.feedAuthor, 
+            { 
+              color: theme.colors.text,
+              textShadowColor: theme.blur ? 'rgba(0, 0, 0, 0.3)' : 'transparent',
+              textShadowOffset: { width: 0, height: 1 },
+              textShadowRadius: theme.blur ? 1 : 0,
+            }
+          ]}>
             {item.author}
           </Text>
-          <Text style={[styles.feedTimestamp, { color: theme.colors.textSecondary }]}>
+          <Text style={[
+            styles.feedTimestamp, 
+            { 
+              color: theme.colors.textSecondary,
+              textShadowColor: theme.blur ? 'rgba(0, 0, 0, 0.3)' : 'transparent',
+              textShadowOffset: { width: 0, height: 1 },
+              textShadowRadius: theme.blur ? 1 : 0,
+            }
+          ]}>
             • {item.timestamp}
           </Text>
         </View>
@@ -140,10 +162,26 @@ export default function FeedScreen() {
         </View>
       </View>
 
-      <Text style={[styles.feedTitle, { color: theme.colors.text }]}>
+      <Text style={[
+        styles.feedTitle, 
+        { 
+          color: theme.colors.text,
+          textShadowColor: theme.blur ? 'rgba(0, 0, 0, 0.3)' : 'transparent',
+          textShadowOffset: { width: 0, height: 1 },
+          textShadowRadius: theme.blur ? 1 : 0,
+        }
+      ]}>
         {item.title}
       </Text>
-      <Text style={[styles.feedContent, { color: theme.colors.textSecondary }]}>
+      <Text style={[
+        styles.feedContent, 
+        { 
+          color: theme.colors.textSecondary,
+          textShadowColor: theme.blur ? 'rgba(0, 0, 0, 0.3)' : 'transparent',
+          textShadowOffset: { width: 0, height: 1 },
+          textShadowRadius: theme.blur ? 1 : 0,
+        }
+      ]}>
         {item.content}
       </Text>
 
@@ -157,14 +195,30 @@ export default function FeedScreen() {
             color={item.isLiked ? '#ef4444' : theme.colors.textSecondary}
             fill={item.isLiked ? '#ef4444' : 'none'}
           />
-          <Text style={[styles.actionText, { color: theme.colors.textSecondary }]}>
+          <Text style={[
+            styles.actionText, 
+            { 
+              color: theme.colors.textSecondary,
+              textShadowColor: theme.blur ? 'rgba(0, 0, 0, 0.3)' : 'transparent',
+              textShadowOffset: { width: 0, height: 1 },
+              textShadowRadius: theme.blur ? 1 : 0,
+            }
+          ]}>
             {item.likes}
           </Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.actionButton}>
           <MessageCircle size={20} color={theme.colors.textSecondary} />
-          <Text style={[styles.actionText, { color: theme.colors.textSecondary }]}>
+          <Text style={[
+            styles.actionText, 
+            { 
+              color: theme.colors.textSecondary,
+              textShadowColor: theme.blur ? 'rgba(0, 0, 0, 0.3)' : 'transparent',
+              textShadowOffset: { width: 0, height: 1 },
+              textShadowRadius: theme.blur ? 1 : 0,
+            }
+          ]}>
             {item.comments}
           </Text>
         </TouchableOpacity>
@@ -189,30 +243,7 @@ export default function FeedScreen() {
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
-      <View style={[styles.header, theme.blur && styles.headerBlur]}>
-        {theme.blur ? (
-          <BlurView
-            style={StyleSheet.absoluteFillObject}
-            intensity={20}
-            tint={currentTheme === 'dark' ? 'dark' : 'light'}
-          />
-        ) : (
-          <View style={[StyleSheet.absoluteFillObject, { backgroundColor: theme.colors.surface }]} />
-        )}
-        
-        <TouchableOpacity 
-          onPress={() => router.back()}
-          style={[styles.backButton, { backgroundColor: theme.colors.button }]}
-        >
-          <ChevronLeft size={24} color={theme.colors.buttonText} />
-        </TouchableOpacity>
-        
-        <Text style={[styles.headerTitle, { color: theme.colors.text }]}>
-          Feed
-        </Text>
-        
-        <View style={styles.headerSpacer} />
-      </View>
+      <Header title="Feed" showBackButton />
 
       <FlatList
         data={feedItems}
@@ -236,41 +267,15 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 15,
-    borderBottomWidth: 1,
-    borderBottomColor: 'rgba(255, 255, 255, 0.1)',
-  },
-  headerBlur: {
-    backgroundColor: 'transparent',
-  },
-  backButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  headerTitle: {
-    flex: 1,
-    fontSize: 18,
-    fontWeight: '600',
-    textAlign: 'center',
-  },
-  headerSpacer: {
-    width: 40,
-  },
   feedList: {
     padding: 20,
-    paddingBottom: 100, // Account for tab bar
+    paddingBottom: 120,
   },
   feedItem: {
     borderRadius: 12,
     padding: 16,
     marginBottom: 16,
+    overflow: 'hidden',
   },
   feedHeader: {
     flexDirection: 'row',

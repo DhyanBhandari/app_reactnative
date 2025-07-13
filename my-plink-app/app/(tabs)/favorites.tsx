@@ -11,9 +11,9 @@ import {
   SafeAreaView,
 } from 'react-native';
 import { BlurView } from 'expo-blur';
-import { ChevronLeft, Search, Filter, ChevronDown, Star, Trash2, Heart } from 'lucide-react-native';
+import { Search, Filter, ChevronDown, Star, Trash2, Heart } from 'lucide-react-native';
 import { useTheme } from '@/context/ThemeContext';
-import { router } from 'expo-router';
+import Header from '@/components/Header';
 
 interface FavoriteItem {
   id: number;
@@ -97,26 +97,73 @@ export default function FavoritesScreen() {
 
   const renderFavoriteItem = ({ item }: { item: FavoriteItem }) => (
     <View style={[styles.favoriteItem, { backgroundColor: theme.colors.card }]}>
+      {theme.blur && (
+        <BlurView
+          style={StyleSheet.absoluteFillObject}
+          intensity={theme.blurIntensity / 2}
+          tint={currentTheme === 'dark' ? 'dark' : 'light'}
+        />
+      )}
       <View style={styles.favoriteContent}>
         <Text style={styles.favoriteEmoji}>{item.emoji}</Text>
         <View style={styles.favoriteDetails}>
-          <Text style={[styles.favoriteTitle, { color: theme.colors.text }]}>
+          <Text style={[
+            styles.favoriteTitle, 
+            { 
+              color: theme.colors.text,
+              textShadowColor: theme.blur ? 'rgba(0, 0, 0, 0.3)' : 'transparent',
+              textShadowOffset: { width: 0, height: 1 },
+              textShadowRadius: theme.blur ? 1 : 0,
+            }
+          ]}>
             {item.title}
           </Text>
-          <Text style={[styles.favoriteDescription, { color: theme.colors.textSecondary }]}>
+          <Text style={[
+            styles.favoriteDescription, 
+            { 
+              color: theme.colors.textSecondary,
+              textShadowColor: theme.blur ? 'rgba(0, 0, 0, 0.3)' : 'transparent',
+              textShadowOffset: { width: 0, height: 1 },
+              textShadowRadius: theme.blur ? 1 : 0,
+            }
+          ]}>
             {item.description}
           </Text>
           <View style={styles.favoriteMetadata}>
             <View style={styles.ratingContainer}>
               <Star size={12} color="#fbbf24" />
-              <Text style={[styles.rating, { color: theme.colors.textSecondary }]}>
+              <Text style={[
+                styles.rating, 
+                { 
+                  color: theme.colors.textSecondary,
+                  textShadowColor: theme.blur ? 'rgba(0, 0, 0, 0.3)' : 'transparent',
+                  textShadowOffset: { width: 0, height: 1 },
+                  textShadowRadius: theme.blur ? 1 : 0,
+                }
+              ]}>
                 {item.rating}
               </Text>
             </View>
-            <Text style={[styles.category, { color: theme.colors.textSecondary }]}>
+            <Text style={[
+              styles.category, 
+              { 
+                color: theme.colors.textSecondary,
+                textShadowColor: theme.blur ? 'rgba(0, 0, 0, 0.3)' : 'transparent',
+                textShadowOffset: { width: 0, height: 1 },
+                textShadowRadius: theme.blur ? 1 : 0,
+              }
+            ]}>
               {item.category}
             </Text>
-            <Text style={[styles.saved, { color: theme.colors.textSecondary }]}>
+            <Text style={[
+              styles.saved, 
+              { 
+                color: theme.colors.textSecondary,
+                textShadowColor: theme.blur ? 'rgba(0, 0, 0, 0.3)' : 'transparent',
+                textShadowOffset: { width: 0, height: 1 },
+                textShadowRadius: theme.blur ? 1 : 0,
+              }
+            ]}>
               {item.saved}
             </Text>
           </View>
@@ -134,10 +181,26 @@ export default function FavoritesScreen() {
   const EmptyState = () => (
     <View style={styles.emptyState}>
       <Heart size={64} color={theme.colors.textSecondary} />
-      <Text style={[styles.emptyTitle, { color: theme.colors.text }]}>
+      <Text style={[
+        styles.emptyTitle, 
+        { 
+          color: theme.colors.text,
+          textShadowColor: theme.blur ? 'rgba(0, 0, 0, 0.3)' : 'transparent',
+          textShadowOffset: { width: 0, height: 1 },
+          textShadowRadius: theme.blur ? 2 : 0,
+        }
+      ]}>
         No favorites found
       </Text>
-      <Text style={[styles.emptySubtitle, { color: theme.colors.textSecondary }]}>
+      <Text style={[
+        styles.emptySubtitle, 
+        { 
+          color: theme.colors.textSecondary,
+          textShadowColor: theme.blur ? 'rgba(0, 0, 0, 0.3)' : 'transparent',
+          textShadowOffset: { width: 0, height: 1 },
+          textShadowRadius: theme.blur ? 1 : 0,
+        }
+      ]}>
         {searchTerm || filter !== 'all' 
           ? 'Try adjusting your search or filter'
           : 'Start adding items to your favorites to see them here'
@@ -148,34 +211,18 @@ export default function FavoritesScreen() {
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
-      <View style={[styles.header, theme.blur && styles.headerBlur]}>
-        {theme.blur ? (
-          <BlurView
-            style={StyleSheet.absoluteFillObject}
-            intensity={20}
-            tint={currentTheme === 'dark' ? 'dark' : 'light'}
-          />
-        ) : (
-          <View style={[StyleSheet.absoluteFillObject, { backgroundColor: theme.colors.surface }]} />
-        )}
-        
-        <TouchableOpacity 
-          onPress={() => router.back()}
-          style={[styles.backButton, { backgroundColor: theme.colors.button }]}
-        >
-          <ChevronLeft size={24} color={theme.colors.buttonText} />
-        </TouchableOpacity>
-        
-        <Text style={[styles.headerTitle, { color: theme.colors.text }]}>
-          Favorites
-        </Text>
-        
-        <View style={styles.headerSpacer} />
-      </View>
+      <Header title="Favorites" showBackButton />
 
       <View style={styles.content}>
         <View style={styles.searchContainer}>
-          <View style={styles.searchInputContainer}>
+          <View style={[styles.searchInputContainer, { backgroundColor: theme.colors.input }]}>
+            {theme.blur && (
+              <BlurView
+                style={StyleSheet.absoluteFillObject}
+                intensity={theme.blurIntensity / 3}
+                tint={currentTheme === 'dark' ? 'dark' : 'light'}
+              />
+            )}
             <Search size={16} color={theme.colors.textSecondary} />
             <TextInput
               value={searchTerm}
@@ -187,8 +234,23 @@ export default function FavoritesScreen() {
           </View>
           
           <TouchableOpacity style={[styles.filterButton, { backgroundColor: theme.colors.card }]}>
+            {theme.blur && (
+              <BlurView
+                style={StyleSheet.absoluteFillObject}
+                intensity={theme.blurIntensity / 3}
+                tint={currentTheme === 'dark' ? 'dark' : 'light'}
+              />
+            )}
             <Filter size={16} color={theme.colors.textSecondary} />
-            <Text style={[styles.filterText, { color: theme.colors.text }]}>
+            <Text style={[
+              styles.filterText, 
+              { 
+                color: theme.colors.text,
+                textShadowColor: theme.blur ? 'rgba(0, 0, 0, 0.3)' : 'transparent',
+                textShadowOffset: { width: 0, height: 1 },
+                textShadowRadius: theme.blur ? 1 : 0,
+              }
+            ]}>
               {filter === 'all' ? 'All' : filter}
             </Text>
             <ChevronDown size={16} color={theme.colors.textSecondary} />
@@ -215,36 +277,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 15,
-    borderBottomWidth: 1,
-    borderBottomColor: 'rgba(255, 255, 255, 0.1)',
-  },
-  headerBlur: {
-    backgroundColor: 'transparent',
-  },
-  backButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  headerTitle: {
-    flex: 1,
-    fontSize: 18,
-    fontWeight: '600',
-    textAlign: 'center',
-  },
-  headerSpacer: {
-    width: 40,
-  },
   content: {
     flex: 1,
     paddingHorizontal: 20,
+    paddingBottom: 120,
   },
   searchContainer: {
     flexDirection: 'row',
@@ -255,10 +291,10 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
     borderRadius: 8,
     paddingHorizontal: 12,
     gap: 8,
+    overflow: 'hidden',
   },
   searchInput: {
     flex: 1,
@@ -272,6 +308,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     borderRadius: 8,
     gap: 4,
+    overflow: 'hidden',
   },
   filterText: {
     fontSize: 14,
@@ -286,6 +323,7 @@ const styles = StyleSheet.create({
     padding: 16,
     borderRadius: 12,
     marginBottom: 12,
+    overflow: 'hidden',
   },
   favoriteContent: {
     flex: 1,

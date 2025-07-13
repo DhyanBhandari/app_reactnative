@@ -27,10 +27,12 @@ import {
   Lock,
   CreditCard,
   UserX,
-  ChevronRight
+  ChevronRight,
+  Droplets
 } from 'lucide-react-native';
 import { useTheme } from '@/context/ThemeContext';
 import { router } from 'expo-router';
+import Header from '@/components/Header';
 
 export default function SettingsScreen() {
   const { theme, currentTheme, setCurrentTheme } = useTheme();
@@ -38,7 +40,7 @@ export default function SettingsScreen() {
   const themeOptions = [
     { value: 'light', label: 'Light', icon: Sun },
     { value: 'dark', label: 'Dark', icon: Moon },
-    { value: 'ios-glass', label: 'iOS Glass', icon: Circle },
+    { value: 'liquidGlass', label: 'Liquid Glass', icon: Droplets },
     { value: 'system', label: 'System Default', icon: Smartphone },
   ];
 
@@ -56,36 +58,28 @@ export default function SettingsScreen() {
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
-      <View style={[styles.header, theme.blur && styles.headerBlur]}>
-        {theme.blur ? (
-          <BlurView
-            style={StyleSheet.absoluteFillObject}
-            intensity={20}
-            tint={currentTheme === 'dark' ? 'dark' : 'light'}
-          />
-        ) : (
-          <View style={[StyleSheet.absoluteFillObject, { backgroundColor: theme.colors.surface }]} />
-        )}
-        
-        <TouchableOpacity 
-          onPress={() => router.back()}
-          style={[styles.backButton, { backgroundColor: theme.colors.button }]}
-        >
-          <ChevronLeft size={24} color={theme.colors.buttonText} />
-        </TouchableOpacity>
-        
-        <Text style={[styles.headerTitle, { color: theme.colors.text }]}>
-          Settings
-        </Text>
-        
-        <View style={styles.headerSpacer} />
-      </View>
+      <Header title="Settings" showBackButton />
 
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
         <View style={[styles.section, { backgroundColor: theme.colors.card }]}>
+          {theme.blur && (
+            <BlurView
+              style={StyleSheet.absoluteFillObject}
+              intensity={theme.blurIntensity / 2}
+              tint={currentTheme === 'dark' ? 'dark' : 'light'}
+            />
+          )}
           <View style={styles.sectionHeader}>
             <Palette size={20} color={theme.colors.textSecondary} />
-            <Text style={[styles.sectionTitle, { color: theme.colors.text }]}>
+            <Text style={[
+              styles.sectionTitle, 
+              { 
+                color: theme.colors.text,
+                textShadowColor: theme.blur ? 'rgba(0, 0, 0, 0.3)' : 'transparent',
+                textShadowOffset: { width: 0, height: 1 },
+                textShadowRadius: theme.blur ? 1 : 0,
+              }
+            ]}>
               Theme
             </Text>
           </View>
@@ -108,7 +102,12 @@ export default function SettingsScreen() {
                   />
                   <Text style={[
                     styles.themeOptionText,
-                    { color: currentTheme === option.value ? theme.colors.primary : theme.colors.text }
+                    { 
+                      color: currentTheme === option.value ? theme.colors.primary : theme.colors.text,
+                      textShadowColor: theme.blur ? 'rgba(0, 0, 0, 0.3)' : 'transparent',
+                      textShadowOffset: { width: 0, height: 1 },
+                      textShadowRadius: theme.blur ? 1 : 0,
+                    }
                   ]}>
                     {option.label}
                   </Text>
@@ -122,7 +121,22 @@ export default function SettingsScreen() {
         </View>
 
         <View style={[styles.section, { backgroundColor: theme.colors.card }]}>
-          <Text style={[styles.sectionTitle, { color: theme.colors.text }]}>
+          {theme.blur && (
+            <BlurView
+              style={StyleSheet.absoluteFillObject}
+              intensity={theme.blurIntensity / 2}
+              tint={currentTheme === 'dark' ? 'dark' : 'light'}
+            />
+          )}
+          <Text style={[
+            styles.sectionTitle, 
+            { 
+              color: theme.colors.text,
+              textShadowColor: theme.blur ? 'rgba(0, 0, 0, 0.3)' : 'transparent',
+              textShadowOffset: { width: 0, height: 1 },
+              textShadowRadius: theme.blur ? 1 : 0,
+            }
+          ]}>
             Notifications
           </Text>
           
@@ -152,7 +166,22 @@ export default function SettingsScreen() {
         </View>
 
         <View style={[styles.section, { backgroundColor: theme.colors.card }]}>
-          <Text style={[styles.sectionTitle, { color: theme.colors.text }]}>
+          {theme.blur && (
+            <BlurView
+              style={StyleSheet.absoluteFillObject}
+              intensity={theme.blurIntensity / 2}
+              tint={currentTheme === 'dark' ? 'dark' : 'light'}
+            />
+          )}
+          <Text style={[
+            styles.sectionTitle, 
+            { 
+              color: theme.colors.text,
+              textShadowColor: theme.blur ? 'rgba(0, 0, 0, 0.3)' : 'transparent',
+              textShadowOffset: { width: 0, height: 1 },
+              textShadowRadius: theme.blur ? 1 : 0,
+            }
+          ]}>
             Privacy & Data
           </Text>
           
@@ -182,7 +211,22 @@ export default function SettingsScreen() {
         </View>
 
         <View style={[styles.section, { backgroundColor: theme.colors.card }]}>
-          <Text style={[styles.sectionTitle, { color: theme.colors.text }]}>
+          {theme.blur && (
+            <BlurView
+              style={StyleSheet.absoluteFillObject}
+              intensity={theme.blurIntensity / 2}
+              tint={currentTheme === 'dark' ? 'dark' : 'light'}
+            />
+          )}
+          <Text style={[
+            styles.sectionTitle, 
+            { 
+              color: theme.colors.text,
+              textShadowColor: theme.blur ? 'rgba(0, 0, 0, 0.3)' : 'transparent',
+              textShadowOffset: { width: 0, height: 1 },
+              textShadowRadius: theme.blur ? 1 : 0,
+            }
+          ]}>
             Account Settings
           </Text>
           
@@ -247,10 +291,26 @@ const SettingRow: React.FC<SettingRowProps> = ({
     >
       <Icon size={20} color={textColor || theme.colors.textSecondary} />
       <View style={styles.settingContent}>
-        <Text style={[styles.settingTitle, { color: textColor || theme.colors.text }]}>
+        <Text style={[
+          styles.settingTitle, 
+          { 
+            color: textColor || theme.colors.text,
+            textShadowColor: theme.blur ? 'rgba(0, 0, 0, 0.3)' : 'transparent',
+            textShadowOffset: { width: 0, height: 1 },
+            textShadowRadius: theme.blur ? 1 : 0,
+          }
+        ]}>
           {title}
         </Text>
-        <Text style={[styles.settingSubtitle, { color: theme.colors.textSecondary }]}>
+        <Text style={[
+          styles.settingSubtitle, 
+          { 
+            color: theme.colors.textSecondary,
+            textShadowColor: theme.blur ? 'rgba(0, 0, 0, 0.3)' : 'transparent',
+            textShadowOffset: { width: 0, height: 1 },
+            textShadowRadius: theme.blur ? 1 : 0,
+          }
+        ]}>
           {subtitle}
         </Text>
       </View>
@@ -272,41 +332,16 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 15,
-    borderBottomWidth: 1,
-    borderBottomColor: 'rgba(255, 255, 255, 0.1)',
-  },
-  headerBlur: {
-    backgroundColor: 'transparent',
-  },
-  backButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  headerTitle: {
-    flex: 1,
-    fontSize: 18,
-    fontWeight: '600',
-    textAlign: 'center',
-  },
-  headerSpacer: {
-    width: 40,
-  },
   content: {
     flex: 1,
     paddingHorizontal: 20,
+    paddingBottom: 120,
   },
   section: {
     borderRadius: 12,
     padding: 16,
     marginVertical: 8,
+    overflow: 'hidden',
   },
   sectionHeader: {
     flexDirection: 'row',

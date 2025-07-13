@@ -10,9 +10,9 @@ import {
   SafeAreaView,
 } from 'react-native';
 import { BlurView } from 'expo-blur';
-import { ChevronLeft, ChevronDown, Plus, X, Star } from 'lucide-react-native';
+import { ChevronDown, Plus, X, Star } from 'lucide-react-native';
 import { useTheme } from '@/context/ThemeContext';
-import { router } from 'expo-router';
+import Header from '@/components/Header';
 
 interface BusinessSection {
   id: string;
@@ -57,30 +57,7 @@ export default function ProfileScreen() {
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
-      <View style={[styles.header, theme.blur && styles.headerBlur]}>
-        {theme.blur ? (
-          <BlurView
-            style={StyleSheet.absoluteFillObject}
-            intensity={20}
-            tint={currentTheme === 'dark' ? 'dark' : 'light'}
-          />
-        ) : (
-          <View style={[StyleSheet.absoluteFillObject, { backgroundColor: theme.colors.surface }]} />
-        )}
-        
-        <TouchableOpacity 
-          onPress={() => router.back()}
-          style={[styles.backButton, { backgroundColor: theme.colors.button }]}
-        >
-          <ChevronLeft size={24} color={theme.colors.buttonText} />
-        </TouchableOpacity>
-        
-        <Text style={[styles.headerTitle, { color: theme.colors.text }]}>
-          Profile
-        </Text>
-        
-        <View style={styles.headerSpacer} />
-      </View>
+      <Header title="Profile" showBackButton />
 
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
         <View style={styles.userInfoSection}>
@@ -90,16 +67,39 @@ export default function ProfileScreen() {
             </Text>
           </View>
           <View style={styles.userDetails}>
-            <Text style={[styles.userName, { color: theme.colors.text }]}>
+            <Text style={[
+              styles.userName, 
+              { 
+                color: theme.colors.text,
+                textShadowColor: theme.blur ? 'rgba(0, 0, 0, 0.3)' : 'transparent',
+                textShadowOffset: { width: 0, height: 1 },
+                textShadowRadius: theme.blur ? 2 : 0,
+              }
+            ]}>
               {isUserMode ? 'User Name' : 'Business Name'}
             </Text>
-            <Text style={[styles.userEmail, { color: theme.colors.textSecondary }]}>
+            <Text style={[
+              styles.userEmail, 
+              { 
+                color: theme.colors.textSecondary,
+                textShadowColor: theme.blur ? 'rgba(0, 0, 0, 0.3)' : 'transparent',
+                textShadowOffset: { width: 0, height: 1 },
+                textShadowRadius: theme.blur ? 1 : 0,
+              }
+            ]}>
               {isUserMode ? 'user@example.com' : 'business@example.com'}
             </Text>
           </View>
         </View>
 
         <View style={[styles.modeToggle, { backgroundColor: theme.colors.card }]}>
+          {theme.blur && (
+            <BlurView
+              style={StyleSheet.absoluteFillObject}
+              intensity={theme.blurIntensity / 2}
+              tint={currentTheme === 'dark' ? 'dark' : 'light'}
+            />
+          )}
           <TouchableOpacity
             onPress={() => setIsUserMode(true)}
             style={[
@@ -151,18 +151,56 @@ export default function ProfileScreen() {
         )}
 
         <View style={[styles.settingsSection, { backgroundColor: theme.colors.card }]}>
-          <Text style={[styles.sectionTitle, { color: theme.colors.text }]}>
+          {theme.blur && (
+            <BlurView
+              style={StyleSheet.absoluteFillObject}
+              intensity={theme.blurIntensity / 2}
+              tint={currentTheme === 'dark' ? 'dark' : 'light'}
+            />
+          )}
+          <Text style={[
+            styles.sectionTitle, 
+            { 
+              color: theme.colors.text,
+              textShadowColor: theme.blur ? 'rgba(0, 0, 0, 0.3)' : 'transparent',
+              textShadowOffset: { width: 0, height: 1 },
+              textShadowRadius: theme.blur ? 1 : 0,
+            }
+          ]}>
             {isUserMode ? 'Personal Settings' : 'Business Details'}
           </Text>
           
           {isUserMode ? (
             <View style={styles.settingsContent}>
               <View style={styles.inputGroup}>
-                <Text style={[styles.inputLabel, { color: theme.colors.textSecondary }]}>
+                <Text style={[
+                  styles.inputLabel, 
+                  { 
+                    color: theme.colors.textSecondary,
+                    textShadowColor: theme.blur ? 'rgba(0, 0, 0, 0.3)' : 'transparent',
+                    textShadowOffset: { width: 0, height: 1 },
+                    textShadowRadius: theme.blur ? 1 : 0,
+                  }
+                ]}>
                   Language
                 </Text>
                 <View style={[styles.pickerContainer, { backgroundColor: theme.colors.input }]}>
-                  <Text style={[styles.pickerText, { color: theme.colors.text }]}>
+                  {theme.blur && (
+                    <BlurView
+                      style={StyleSheet.absoluteFillObject}
+                      intensity={theme.blurIntensity / 3}
+                      tint={currentTheme === 'dark' ? 'dark' : 'light'}
+                    />
+                  )}
+                  <Text style={[
+                    styles.pickerText, 
+                    { 
+                      color: theme.colors.text,
+                      textShadowColor: theme.blur ? 'rgba(0, 0, 0, 0.3)' : 'transparent',
+                      textShadowOffset: { width: 0, height: 1 },
+                      textShadowRadius: theme.blur ? 1 : 0,
+                    }
+                  ]}>
                     English
                   </Text>
                   <ChevronDown size={20} color={theme.colors.textSecondary} />
@@ -170,11 +208,34 @@ export default function ProfileScreen() {
               </View>
               
               <View style={styles.inputGroup}>
-                <Text style={[styles.inputLabel, { color: theme.colors.textSecondary }]}>
+                <Text style={[
+                  styles.inputLabel, 
+                  { 
+                    color: theme.colors.textSecondary,
+                    textShadowColor: theme.blur ? 'rgba(0, 0, 0, 0.3)' : 'transparent',
+                    textShadowOffset: { width: 0, height: 1 },
+                    textShadowRadius: theme.blur ? 1 : 0,
+                  }
+                ]}>
                   Default Tone
                 </Text>
                 <View style={[styles.pickerContainer, { backgroundColor: theme.colors.input }]}>
-                  <Text style={[styles.pickerText, { color: theme.colors.text }]}>
+                  {theme.blur && (
+                    <BlurView
+                      style={StyleSheet.absoluteFillObject}
+                      intensity={theme.blurIntensity / 3}
+                      tint={currentTheme === 'dark' ? 'dark' : 'light'}
+                    />
+                  )}
+                  <Text style={[
+                    styles.pickerText, 
+                    { 
+                      color: theme.colors.text,
+                      textShadowColor: theme.blur ? 'rgba(0, 0, 0, 0.3)' : 'transparent',
+                      textShadowOffset: { width: 0, height: 1 },
+                      textShadowRadius: theme.blur ? 1 : 0,
+                    }
+                  ]}>
                     Friendly
                   </Text>
                   <ChevronDown size={20} color={theme.colors.textSecondary} />
@@ -245,36 +306,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 15,
-    borderBottomWidth: 1,
-    borderBottomColor: 'rgba(255, 255, 255, 0.1)',
-  },
-  headerBlur: {
-    backgroundColor: 'transparent',
-  },
-  backButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  headerTitle: {
-    flex: 1,
-    fontSize: 18,
-    fontWeight: '600',
-    textAlign: 'center',
-  },
-  headerSpacer: {
-    width: 40,
-  },
   content: {
     flex: 1,
     paddingHorizontal: 20,
+    paddingBottom: 120,
   },
   userInfoSection: {
     flexDirection: 'row',
@@ -310,6 +345,7 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     padding: 4,
     marginBottom: 20,
+    overflow: 'hidden',
   },
   modeButton: {
     flex: 1,
@@ -362,6 +398,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 16,
     marginBottom: 20,
+    overflow: 'hidden',
   },
   sectionTitle: {
     fontSize: 16,
@@ -384,6 +421,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     padding: 12,
     borderRadius: 8,
+    overflow: 'hidden',
   },
   pickerText: {
     fontSize: 16,
